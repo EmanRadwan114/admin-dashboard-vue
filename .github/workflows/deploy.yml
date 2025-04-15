@@ -1,0 +1,32 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      PRODUCTS_API_URL: ${{ secrets.PRODUCTS_API_URL }}
+      CATEGORIES_API_URL: ${{ secrets.CATEGORIES_API_URL }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      # Example deploy step — you can change this to Netlify, Vercel, etc.
+      - name: Deploy
+        run: echo "Deploy step here"

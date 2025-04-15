@@ -109,7 +109,7 @@ export default {
 
   methods: {
     editCategory(id) {
-      this.$router.push(`/edit-category/${id}`);
+      this.$router.push(`/categories/edit-category/${id}`);
       this.$emit("refresh");
     },
 

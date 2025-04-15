@@ -33,7 +33,7 @@
                 <router-link
                   class="nav-link"
                   active-class="active"
-                  to="/add-product"
+                  to="/products/add-product"
                   >Add Product</router-link
                 >
               </li>
@@ -41,7 +41,7 @@
                 <router-link
                   class="nav-link"
                   active-class="active"
-                  to="/add-category"
+                  to="/categories/add-category"
                   >Add Category</router-link
                 >
               </li>
@@ -138,7 +138,7 @@
                 <router-link
                   class="nav-link"
                   active-class="active"
-                  to="/add-product"
+                  to="/products/add-product"
                   >Add Product</router-link
                 >
               </li>
@@ -146,7 +146,7 @@
                 <router-link
                   class="nav-link"
                   active-class="active"
-                  to="/add-category"
+                  to="/categories/add-category"
                   >Add Category</router-link
                 >
               </li>

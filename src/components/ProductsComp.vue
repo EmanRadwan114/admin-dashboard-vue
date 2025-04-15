@@ -1,6 +1,6 @@
 <template>
   <LoadingScreen v-if="!products.length" />
-  <LoadingScreen v-if="productId && products.length" />
+  <LoadingScreen v-if="isLoading" />
   <main>
     <section class="table-responsive pt-4">
       <table class="table table-striped">
@@ -24,7 +24,7 @@
             <th scope="row">{{ item.id }}</th>
             <td>
               <img
-                :src="item.thumbnail"
+                :src="item.thumbnail ? item.thumbnail : '/logo.png'"
                 :alt="item.title"
                 class="w-100 thumbnail"
               />
@@ -121,6 +121,7 @@ export default {
 
     const products = computed(() => store.getters.getAllProducts);
     const productId = ref(0);
+    const isLoading = ref(false);
 
     const getProductDetails = (id) => {
       route.push(`/products/${id}`);
@@ -128,9 +129,11 @@ export default {
 
     const editProduct = async (id) => {
       try {
+        isLoading.value = true;
         await store.dispatch("getProductById", id);
         productId.value = id;
-        route.push(`/edit-product/${id}`);
+        route.push(`/products/edit-product/${id}`);
+        isLoading.value = false;
       } catch (err) {
         console.error("Failed to fetch product:", err);
       }
@@ -142,8 +145,10 @@ export default {
 
     const deleteProduct = async () => {
       try {
+        isLoading.value = true;
         await store.dispatch("deleteProduct", productId.value);
         store.dispatch("getAllProducts");
+        isLoading.value = false;
       } catch (err) {
         console.error("Failed to delete product:", err);
       }
@@ -157,6 +162,7 @@ export default {
       showModal,
       getProductDetails,
       productId,
+      isLoading,
     };
   },
 };

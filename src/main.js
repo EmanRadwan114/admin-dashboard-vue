@@ -19,19 +19,19 @@ const routes = [
     component: () => import("./components/CategoriesComp.vue"),
   }, // lazy loaded },
   {
-    path: "/add-product",
+    path: "/products/add-product",
     component: () => import("./components/FormComp.vue"),
   },
   {
-    path: "/edit-product/:id",
+    path: "/products/edit-product/:id",
     component: () => import("./components/FormComp.vue"),
   },
   {
-    path: "/add-category",
+    path: "/categories/add-category",
     component: () => import("./components//CategoryForm.vue"),
   },
   {
-    path: "/edit-category/:id",
+    path: "/categories/edit-category/:id",
     component: () => import("./components//CategoryForm.vue"),
   },
   {

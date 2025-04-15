@@ -1,13 +1,12 @@
 <template>
+  <LoadingScreen v-if="isLoading" />
   <h1 class="text-center text-blue mb-4 h3 fw-semibold">
-    {{ $route.fullPath.includes("add") ? "Add" : "Edit" }} New Product
+    {{ isEdit ? "Edit" : "Add" }} New Product
   </h1>
   <form
     class="border-blue p-3 rounded-3"
     method="post"
-    @submit.prevent="
-      $route.fullPath.includes('edit') ? editProduct() : addNewProduct()
-    "
+    @submit.prevent="isEdit ? editProduct() : addNewProduct()"
   >
     <div class="row g-3 align-items-center mb-3">
       <div class="col-12">
@@ -68,12 +67,16 @@
 </template>
 
 <script>
-import { onMounted, reactive, ref } from "vue";
+import { reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
+import LoadingScreen from "./LoadingScreen.vue";
+import { watch } from "vue";
+import { onMounted } from "vue";
 
 export default {
   name: "FormComp",
+  components: { LoadingScreen },
   setup() {
     const store = useStore();
     const route = useRoute();
@@ -81,6 +84,9 @@ export default {
 
     let submitted = ref(false);
     const product = reactive(store.state.product);
+    const isLoading = ref(false);
+
+    const isEdit = ref(route.fullPath.includes("edit"));
 
     const formValues = reactive({
       title: "",
@@ -96,12 +102,18 @@ export default {
       formValues.thumbnail = "";
       formValues.price = "";
       formValues.stock = "";
-      submitted.value = true;
     };
 
-    const addNewProduct = () => {
-      store.dispatch("addNewProduct", formValues);
-      formReset();
+    const addNewProduct = async () => {
+      try {
+        isLoading.value = true;
+        await store.dispatch("addNewProduct", formValues);
+        formReset();
+        submitted.value = true;
+        isLoading.value = false;
+      } catch (err) {
+        console.log(`error in posting product`, err);
+      }
     };
 
     const showProductData = () => {
@@ -114,20 +126,44 @@ export default {
 
     const editProduct = async () => {
       try {
+        isLoading.value = true;
         await store.dispatch("editProduct", formValues);
+        isLoading.value = false;
         router.push(`/products`);
       } catch (err) {
         console.error("Failed to update product:", err);
       }
     };
 
+    // 👉 Run once on mount
     onMounted(() => {
-      if (route.fullPath.includes("edit")) {
+      if (isEdit.value) {
         showProductData();
+      } else {
+        formReset();
       }
     });
 
-    return { formValues, addNewProduct, submitted, editProduct };
+    watch(
+      () => route.fullPath,
+      (newPath) => {
+        isEdit.value = newPath.includes("edit");
+        if (isEdit.value) {
+          showProductData();
+        } else {
+          formReset();
+        }
+      }
+    );
+
+    return {
+      formValues,
+      addNewProduct,
+      submitted,
+      editProduct,
+      isLoading,
+      isEdit,
+    };
   },
 };
 </script>

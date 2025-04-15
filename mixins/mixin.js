@@ -1,5 +1,5 @@
 import axios from "axios";
-const CATEGORIES_API = import.meta.env.CATEGORIES_API_URL;
+const CATEGORIES_API = process.env.VUE_APP_CATEGORIES_API_URL;
 
 export default {
   data() {

@@ -8,10 +8,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    env:
-      PRODUCTS_API_URL: ${{ secrets.PRODUCTS_API_URL }}
-      CATEGORIES_API_URL: ${{ secrets.CATEGORIES_API_URL }}
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -26,7 +22,9 @@ jobs:
 
       - name: Build project
         run: npm run build
+        env:
+          VUE_APP_PRODUCTS_API_URL: ${{ secrets.VUE_APP_PRODUCTS_API_URL }}
+          VUE_APP_CATEGORIES_API_URL: ${{ secrets.VUE_APP_CATEGORIES_API_URL }}
 
-      # Example deploy step — you can change this to Netlify, Vercel, etc.
       - name: Deploy
         run: echo "Deploy step here"

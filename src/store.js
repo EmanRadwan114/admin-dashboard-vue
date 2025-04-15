@@ -1,6 +1,6 @@
 import axios from "axios";
 import { createStore } from "vuex";
-const PRODUCTS_API = import.meta.env.PRODUCTS_API_URL;
+const PRODUCTS_API = process.env.VUE_APP_PRODUCTS_API_URL;
 
 const store = createStore({
   state() {
